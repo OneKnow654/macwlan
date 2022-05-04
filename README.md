@@ -11,8 +11,8 @@ directly
 
 or copy this command
 
-git clone https://github.com/OneKnow654/macwlan.git
-cd macwlan && chmod +x install.sh macwlan
+git clone https://github.com/OneKnow654/macwlan.git &&
+cd macwlan && chmod +x install.sh macwlan &&
 ./install
 
 
