@@ -1,36 +1,41 @@
 #!/bin/bash
 
-
-#This tool for beginners change macaddrr
-#This same as  macchager
-#
-#
-function Help(){
-echo "Usage: macwlan wlan0-9"
-echo "Write name in wlan0 or eth0"
-echo
-echo "macwlan wlan0"
+function help_function() {
+    echo "Usage: macwlan <interface>"
+    echo "Write the name of the network interface (e.g., wlan0, eth0)"
+    echo
+    echo "Example: macwlan wlan0"
 }
 
-var=$1
-function mac () {
-sudo ifconfig $var down
-sudo macchanger -r $var
-sudo macchanger -r $var
-sudo macchanger -r $var
-sudo ifconfig $var up
-echo
-show=$(macchanger -s $var )
-echo ${show:42:-10} #  ShowPermanent Mac
-echo ${show::-52} # Show Current Mac
+function change_mac() {
+    local var=$1
+
+    if [[ -z "$var" ]]; then
+        help_function
+        exit 1
+    fi
+
+    sudo ifconfig "$var" down
+
+    # Change MAC address
+    sudo macchanger -r "$var"
+
+    sudo ifconfig "$var" up
+    echo
+
+    # Get the MAC addresses
+    local show
+    show=$(macchanger -s "$var")
+
+    # Show Permanent MAC
+    echo "Permanent MAC: ${show:42:-10}"
+    # Show Current MAC
+    echo "Current MAC: ${show:13:17}"
 }
 
-if [[ -z "$var" ]];then
- Help   
- 
- elif [[ -n "$var" ]];then
-  	 mac
+# Main script logic
+if [[ -z "$1" ]]; then
+    help_function
+else
+    change_mac "$1"
 fi
-
-
-
